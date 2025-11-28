@@ -1,0 +1,18 @@
+services:
+  arcane-agent:
+    image: ghcr.io/getarcaneapp/arcane-headless:latest
+    container_name: arcane-agent
+    ports:
+      - '3553:3553'
+    environment:
+      - AGENT_MODE=true
+      # Use a strong, temporary bootstrap token for pairing:
+      - AGENT_BOOTSTRAP_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - agent-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  agent-data:
+    driver: local
