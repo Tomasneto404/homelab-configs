@@ -1,8 +1,10 @@
 #!/bin/bash
 
-#############################################################################
-# Pangolin + Homelab Secure VPS UFW Configuration (Developed by Tomás Neto) #
-#############################################################################
+###################################################
+# Pangolin + Homelab Secure VPS UFW Configuration #
+# Copyright (c) 2025 Tomás Neto                   #
+# Licensed under the MIT License                  #
+###################################################
 
 # === Variables ==============================
 HOMELAB_ADDRESS="X.X.X.X"   # <-- Put Here Homelab Address

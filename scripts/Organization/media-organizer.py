@@ -1,7 +1,9 @@
 
-####################################################
-# Media Organizer Script (Developed by Tomás Neto) #
-####################################################
+##################################
+# Media Organizer Script         #
+# Copyright (c) 2025 Tomás Neto  #
+# Licensed under the MIT License #
+##################################
 
 import os, sys, shutil
 

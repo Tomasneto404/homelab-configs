@@ -1,8 +1,11 @@
 #!/bin/bash
 
-####################################################################
-# Ubuntu Server Post Installation Script (Developed by Tomás Neto) #
-####################################################################
+##########################################
+# Ubuntu Server Post Installation Script #
+# Copyright (c) 2025 Tomás Neto          #
+# Licensed under the MIT License         #
+##########################################
+
 
 ########################################################
 # Colors
