@@ -49,5 +49,5 @@ It is suitable for personal homelabs, home servers, and small public-facing VPS 
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/your-username/homelab-configs.git
+git clone https://github.com/Tomasneto404/homelab-configs.git
 cd homelab-configs
