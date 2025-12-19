@@ -22,14 +22,18 @@ RESET="\033[0m"
 msg_info()  { echo -e "${BLUE}[INFO]${RESET} $1"; }
 msg_ok()    { echo -e "${GREEN}[OK]${RESET} $1"; }
 msg_warn()  { echo -e "${YELLOW}[WARN]${RESET} $1"; }
-msg_err()   { echo -e "${RED}[ERRO]${RESET} $1"; }
+msg_err()   { echo -e "${RED}[ERROR]${RESET} $1"; }
 
 ask_yes_no() {
-    local prompt="$1"
-    local answer
-    read -p "$prompt (Y/n) " answer
-    [[ -z "$answer" || "$answer" =~ ^[Yy]$ ]]
+  read -p "$1 (Y/n) " answer
+
+  if [ -z "$answer" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+    return 0  
+  else
+    return 1  
+  fi
 }
+
 
 ########################################################
 # Start Script
