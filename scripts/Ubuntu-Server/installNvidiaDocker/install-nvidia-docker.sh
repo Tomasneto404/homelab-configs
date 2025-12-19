@@ -99,10 +99,8 @@ EOF
     
     # Install Docker if not present
     if ! command -v docker &> /dev/null; then
-        msg_info "Installing Docker..."
-        sudo apt install -y docker.io
-        sudo systemctl enable docker --now
-        msg_ok "Docker installed."
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sh get-docker.sh
     fi
     
     # Install NVIDIA Container Toolkit
