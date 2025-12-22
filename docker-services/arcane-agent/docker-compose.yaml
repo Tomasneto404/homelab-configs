@@ -10,7 +10,7 @@ services:
       - AGENT_BOOTSTRAP_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - agent-data:/app/data
+      - /docker/volumes/agent-data:/app/data
     restart: unless-stopped
 
 volumes:
