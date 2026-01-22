@@ -1,0 +1,84 @@
+networks:
+  zabbix-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          ip_range: 172.20.240.0/20
+
+services:
+  postgres-server:
+    image: postgres:16
+    container_name: postgres-server
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+      POSTGRES_DB: zabbix
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - zabbix-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zabbix"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  zabbix-snmptraps:
+    image: zabbix/zabbix-snmptraps:alpine-7.4-latest
+    container_name: zabbix-snmptraps
+    restart: unless-stopped
+    volumes:
+      - ./snmptraps:/var/lib/zabbix/snmptraps:rw
+      - ./mibs:/usr/share/snmp/mibs:ro
+    ports:
+      - "162:1162/udp"
+    networks:
+      - zabbix-net
+
+  zabbix-server-pgsql:
+    image: zabbix/zabbix-server-pgsql:alpine-7.4-latest
+    container_name: zabbix-server-pgsql
+    restart: unless-stopped
+    depends_on:
+      postgres-server:
+        condition: service_healthy
+      zabbix-snmptraps:
+        condition: service_started
+    environment:
+      DB_SERVER_HOST: postgres-server
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+      POSTGRES_DB: zabbix
+      ZBX_ENABLE_SNMP_TRAPS: "true"
+    ports:
+      - "10051:10051"
+    volumes:
+      - ./snmptraps:/var/lib/zabbix/snmptraps:rw
+    networks:
+      - zabbix-net
+
+  zabbix-web-nginx-pgsql:
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-7.4-latest
+    container_name: zabbix-web-nginx-pgsql
+    restart: unless-stopped
+    depends_on:
+      - zabbix-server-pgsql
+    environment:
+      ZBX_SERVER_HOST: zabbix-server-pgsql
+      DB_SERVER_HOST: postgres-server
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+      POSTGRES_DB: zabbix
+      PHP_TZ: America/Sao_Paulo
+    ports:
+      - "80:8080"
+      - "443:8443"
+    volumes:
+      - /etc/ssl/nginx:/etc/ssl/nginx:ro
+    networks:
+      - zabbix-net
+
+volumes:
+  pg_data:
